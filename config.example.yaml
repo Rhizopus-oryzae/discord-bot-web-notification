@@ -1,0 +1,14 @@
+initial_sync: skip_existing
+
+sites:
+  - id: blog-contoh
+    name: Blog Contoh
+    enabled: true
+    rss_url: ${RSSHUB_BASE_URL}/wordpress/https%3A%2F%2Fblog.example.com
+    channel_id: null
+
+  - id: blog-kedua
+    name: Blog Kedua
+    enabled: false
+    rss_url: ${RSSHUB_BASE_URL}/wordpress/https%3A%2F%2Fanother.example.com
+    channel_id: null

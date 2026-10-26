@@ -2,6 +2,9 @@
 .env.*
 !.env.example
 
+# Local website configuration may contain private/internal targets.
+config.yaml
+
 data/*
 !data/.gitkeep
 sent_posts.json

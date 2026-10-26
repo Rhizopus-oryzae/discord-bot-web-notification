@@ -5,7 +5,7 @@ dan mengirim notifikasi ke channel Discord.
 
 ## Fitur
 
-- Daftar website modular melalui `config.yaml`.
+- Daftar website modular melalui konfigurasi lokal `config.yaml`.
 - Satu channel default atau channel berbeda untuk setiap website.
 - Deduplikasi permanen menggunakan SQLite.
 - Memproses seluruh artikel baru dari satu siklus polling.
@@ -45,10 +45,16 @@ cp .env.example .env
 Isi `DISCORD_TOKEN` dan `DEFAULT_CHANNEL_ID` di `.env`. File ini bersifat
 rahasia dan tidak boleh di-commit.
 
-### 3. Konfigurasi website
+### 3. Buat konfigurasi website lokal
 
-Tambahkan atau ubah website di `config.yaml`. Contoh berikut memakai domain
-placeholder; ganti `blog.example.com` dengan website yang ingin dipantau:
+Salin template lalu ubah `config.yaml` sesuai website yang ingin dipantau.
+File `config.yaml` bersifat lokal dan tidak di-commit.
+
+```bash
+cp config.example.yaml config.yaml
+```
+
+Contoh template memakai domain placeholder:
 
 ```yaml
 initial_sync: skip_existing

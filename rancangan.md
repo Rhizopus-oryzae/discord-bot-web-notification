@@ -59,18 +59,28 @@ RSSHUB_BASE_URL=http://rsshub:1200
 File `.env` harus masuk `.gitignore` dan permission-nya dibatasi agar tidak
 dapat dibaca user lain.
 
-### 4.2 `config.yaml`
+### 4.2 `config.example.yaml` dan `config.yaml`
 
-Daftar situs dan pengaturan non-rahasia disimpan di `config.yaml`:
+Template daftar situs dan pengaturan non-rahasia disimpan di
+`config.example.yaml` dan boleh di-commit karena hanya menggunakan domain
+placeholder. Salin template tersebut menjadi `config.yaml` untuk penggunaan
+lokal:
+
+```bash
+cp config.example.yaml config.yaml
+```
+
+`config.yaml` dapat berisi target website lokal/private dan harus masuk
+`.gitignore`.
 
 ```yaml
 initial_sync: skip_existing
 
 sites:
-  - id: yasir252
-    name: Yasir252
+  - id: blog-contoh
+    name: Blog Contoh
     enabled: true
-    rss_url: http://rsshub:1200/wordpress/https%3A%2F%2Fyasir252.com
+    rss_url: http://rsshub:1200/wordpress/https%3A%2F%2Fblog.example.com
     channel_id: null
 
   - id: contoh
@@ -178,14 +188,15 @@ Ketentuan workflow:
 ## 7. Struktur Modul yang Direncanakan
 
 ```text
-bot.py          # Lifecycle Discord dan polling task
-config.py       # Pembacaan serta validasi .env dan config.yaml
-storage.py      # Inisialisasi dan operasi SQLite
-feed.py         # Pengambilan serta parsing RSS
-formatter.py    # Pembersihan summary dan format pesan Discord
-config.yaml     # Daftar situs yang dipantau
+bot.py              # Lifecycle Discord dan polling task
+config.py           # Pembacaan serta validasi .env dan config.yaml
+storage.py          # Inisialisasi dan operasi SQLite
+feed.py             # Pengambilan serta parsing RSS
+formatter.py        # Pembersihan summary dan format pesan Discord
+config.example.yaml # Template daftar situs generik
+config.yaml         # Konfigurasi lokal, tidak di-commit
 data/
-  bot.sqlite3   # Database runtime, tidak di-commit
+  bot.sqlite3       # Database runtime, tidak di-commit
 ```
 
 Pembagian ini membuat penambahan situs atau perubahan format pesan tidak
@@ -244,7 +255,8 @@ notif/
 ├── feed.py
 ├── formatter.py
 ├── storage.py
-├── config.yaml
+├── config.example.yaml
+├── config.yaml              # Lokal, tidak di-commit
 ├── docker-compose.yaml
 ├── requirements.txt
 ├── rancangan.md
@@ -277,7 +289,8 @@ notif/
 ### Lokal
 
 1. Salin `.env.example` menjadi `.env` dan isi token serta channel Discord.
-2. Sesuaikan daftar situs di `config.yaml`.
+2. Salin `config.example.yaml` menjadi `config.yaml`, lalu sesuaikan daftar
+   situs lokal.
 3. Buat virtual environment dan install dependency:
 
    ```bash
@@ -306,7 +319,8 @@ Di dalam Compose, bot mengakses RSSHub melalui `http://rsshub:1200`.
 
 ## 13. Urutan Implementasi
 
-1. Membuat konfigurasi `.env` dan `config.yaml` yang tervalidasi.
+1. Membuat konfigurasi `.env` dan `config.yaml` yang tervalidasi dari template
+   generik.
 2. Membuat layer SQLite dan migrasi state dari `sent_posts.json` bila
    diperlukan.
 3. Memisahkan pengambilan serta parsing RSS dari `bot.py`.

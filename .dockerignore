@@ -1,6 +1,7 @@
 .env
 .env.*
 !.env.example
+config.yaml
 .git
 data
 sent_posts.json
