@@ -1,0 +1,59 @@
+services:
+  bot:
+    build: .
+    container_name: discord-blog-notification-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      CONFIG_PATH: /app/config.yaml
+      DATABASE_PATH: /app/data/bot.sqlite3
+      RSSHUB_BASE_URL: http://rsshub:1200
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - bot-data:/app/data
+    depends_on:
+      rsshub:
+        condition: service_healthy
+
+  rsshub:
+    image: diygod/rsshub@sha256:b718aea00e69353563d9577181fab53bb7dc2eacd3841218fd2f7f649b0c7443
+    container_name: rsshub
+    restart: unless-stopped
+    ports:
+      - "1200:1200"
+    environment:
+      NODE_ENV: production
+      PORT: 1200
+      CACHE_TYPE: redis
+      REDIS_URL: redis://redis:6379/
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          node -e "require('http').get('http://localhost:1200/', r =>
+          process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () =>
+          process.exit(1))"
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  redis:
+    image: redis:7-alpine
+    container_name: rsshub-redis
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  bot-data:
+  redis-data:

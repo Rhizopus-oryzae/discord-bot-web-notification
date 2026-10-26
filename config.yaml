@@ -1,0 +1,14 @@
+initial_sync: skip_existing
+
+sites:
+  - id: yasir252
+    name: Yasir252
+    enabled: true
+    rss_url: ${RSSHUB_BASE_URL}/wordpress/https%3A%2F%2Fyasir252.com
+    channel_id: null
+
+  - id: contoh
+    name: Contoh Website
+    enabled: false
+    rss_url: ${RSSHUB_BASE_URL}/wordpress/https%3A%2F%2Fcontoh.com
+    channel_id: null
