@@ -27,6 +27,7 @@ services:
       PORT: 1200
       CACHE_TYPE: redis
       REDIS_URL: redis://redis:6379/
+      WORDPRESS_ALLOWED_DOMAINS: yasir252.com,www.yasir252.com
     depends_on:
       redis:
         condition: service_healthy
@@ -53,6 +54,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  bridge:
+    image: python:3.12-slim
+    container_name: rss-bridge-yasir252
+    restart: unless-stopped
+    volumes:
+      - ./bridge.py:/bridge.py:ro
+    command: python /bridge.py
+    environment:
+      PORT: "12000"
 
 volumes:
   bot-data:
